@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: stock-analysis-app
+    runtime: go
+    plan: free
+    buildCommand: |
+      # Build frontend first
+      cd frontend
+      npm install
+      npm run build
+      
+      # Build Go backend
+      cd ../backend-go
+      go mod download
+      go build -buildvcs=false -o main .
+    startCommand: cd backend-go && ./main
+    envVars:
+      - key: ALPHA_VANTAGE_API_KEY
+        value: "5EZY60SHQ1UVWUNW"
+      - key: FINNHUB_API_KEY  
+        value: "d72fqr9r01qqkte0qu2gd72fqr9r01qqkte0qu30"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: PORT
+        value: "8001"
+      - key: GIN_MODE
+        value: "release"
